@@ -1,0 +1,12 @@
+﻿@model IEnumerable<University_.Net.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Girl's Student</h2>
+
+@Html.Partial("_StudentList", Model)
+
+@Html.Partial("_StudentFooter")

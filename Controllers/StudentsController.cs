@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using University_.Net.Models;
 
@@ -38,6 +36,13 @@ namespace University_.Net.Controllers
         // GET: Students/Create
         public ActionResult Create()
         {
+            //ViewBag.EnrollmentDate = "Hello";
+
+            var lista = new List<SexModel>();
+            lista.Add(new SexModel { Name = "Mascuilino", ShortName = "M" });
+            lista.Add(new SexModel { Name = "Femenino", ShortName = "F" });
+            ViewBag.Gender = new SelectList(lista, "ShortName", "Name");
+
             return View();
         }
 
@@ -46,7 +51,7 @@ namespace University_.Net.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentID,LastName,FirstName,Email,EnrollmentDate, Gender")] Student student)
+        public ActionResult Create([Bind(Include = "StudentID,LastName,FirstName,Email,EnrollmentDate,Gender")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +66,11 @@ namespace University_.Net.Controllers
         // GET: Students/Edit/5
         public ActionResult Edit(int? id)
         {
+            var lista = new List<SexModel>();
+            lista.Add(new SexModel { Name = "Masculino", ShortName = "M" });
+            lista.Add(new SexModel { Name = "Femenino", ShortName = "F" });
+            ViewBag.Gender = new SelectList(lista, "ShortName", "Name");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -113,6 +123,15 @@ namespace University_.Net.Controllers
             db.Students.Remove(student);
             db.SaveChanges();
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Masculinos()
+        {
+            return View(db.Students.Where(s => s.Gender == "M").ToList());
+        }
+        public ActionResult Femeninos()
+        {
+            return View(db.Students.Where(s => s.Gender == "F").ToList());
         }
 
         protected override void Dispose(bool disposing)
